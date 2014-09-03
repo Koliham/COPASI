@@ -8,6 +8,7 @@
 
 #include <qlayout/CQEffectDescription.h>
 #include <qlayout/CQCopasiEffect.h>
+#include <qlayout/CQBarEffect.h>
 
 qreal linear(qreal a, qreal b, qreal t)
 {
@@ -145,6 +146,16 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t)
         CQCopasiEffect* effect = new CQCopasiEffect();
         effect->setScale(linear(mScaleStart, mScaleEnd, t));
         effect->setEnabled(true);
+        item->setGraphicsEffect(effect);
+      }
+      break;
+
+      case Bar:
+      {
+        CQBarEffect* effect = new CQBarEffect();
+        //effect->setScale(linear(mScaleStart, mScaleEnd, t));
+        effect->setScale(t);
+		effect->setEnabled(true);
         item->setGraphicsEffect(effect);
       }
       break;

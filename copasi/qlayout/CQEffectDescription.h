@@ -18,7 +18,8 @@ public:
   {
     DropShadow,
     Colorize,
-    Scale
+    Scale,
+	Bar
   };
 
   CQEffectDescription(const std::string& cn, qreal startScale, qreal endScale);

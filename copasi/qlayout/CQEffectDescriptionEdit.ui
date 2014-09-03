@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<comment> Copyright (C) 2013 by Pedro Mendes, Virginia Tech Intellectual </comment>
-<comment> Properties, Inc., University of Heidelberg, and The University </comment>
-<comment> of Manchester. </comment>
-<comment> All rights reserved. </comment>
-
-
+ <comment> All rights reserved. </comment>
  <class>CQEffectDescriptionEdit</class>
  <widget class="QWidget" name="CQEffectDescriptionEdit">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
+    <width>292</width>
     <height>220</height>
    </rect>
   </property>
@@ -53,6 +48,13 @@
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radBar">
+        <property name="text">
+         <string>Bar</string>
         </property>
        </widget>
       </item>

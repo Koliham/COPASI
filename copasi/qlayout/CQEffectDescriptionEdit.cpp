@@ -67,6 +67,10 @@ void CQEffectDescriptionEdit::initFrom(const CQEffectDescription* other, bool mu
         radShadow->setChecked(true);
         break;
 
+      case CQEffectDescription::Bar:
+        radBar->setChecked(true);
+        break;
+
       default:
       case CQEffectDescription::Scale:
         radScale->setChecked(true);
@@ -85,6 +89,8 @@ void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multipl
     other->setMode(CQEffectDescription::Colorize);
   else if (radShadow->isChecked())
     other->setMode(CQEffectDescription::DropShadow);
+  else if (radBar->isChecked())
+    other->setMode(CQEffectDescription::Bar);
   else
     other->setMode(CQEffectDescription::Scale);
 }
@@ -102,6 +108,8 @@ CQEffectDescription* CQEffectDescriptionEdit::toDescription() const
     result->setMode(CQEffectDescription::Colorize);
   else if (radShadow->isChecked())
     result->setMode(CQEffectDescription::DropShadow);
+  else if (radBar->isChecked())
+    result->setMode(CQEffectDescription::Bar);
   else
     result->setMode(CQEffectDescription::Scale);
 
