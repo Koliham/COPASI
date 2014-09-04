@@ -34,23 +34,26 @@ void CQBarEffect::draw(QPainter* painter)
   painter->setWorldTransform(QTransform());
   QRectF rect = pixmap.rect();
 
-  QTransform trans = QTransform::fromScale(mScale, mScale);
+  QTransform trans = QTransform::fromScale(1.0,1.0);
   QPixmap transformed = pixmap.transformed(trans, Qt::SmoothTransformation);
   QRectF transRect = transformed.rect();
 
   QPointF newOffset = offset + (rect.center() - transRect.center());
 
-  //painter->drawPixmap(newOffset, transformed);
+  painter->drawPixmap(newOffset, transformed);
   
   
-  QPoint koord(offset.x(),offset.y());
-  QPoint ykoord(offset.x()+41,offset.y()+21);
-  QPoint koordi(offset.x()+1,offset.y()+1);
-  QPoint ykoordi(offset.x()+40*(mScale), offset.y()+20);
-  QRectF ort(koord,ykoord);
-  QRectF ladebalken(koordi,ykoordi);
-  
-  painter->drawRect(ort);
+  //QPointF rahmenol(offset.x(),offset.y());
+  //QPointF rahmenur(offset.x()+41,offset.y()+21);
+  QPointF rahmenol(offset.x(),offset.y());
+  QPointF rahmenur(offset.x()+rect.width(),offset.y()+5+1);
+  QPoint balkenol(offset.x()+1,offset.y()+1);
+  QPoint balkenur(offset.x()+(rect.width()-1)*(mScale), offset.y()+5);
+  QRectF ort(rahmenol,rahmenur);
+  QRectF ladebalken(balkenol,balkenur);
+  //dünner Rahmen
+
+  painter->drawRect(ort);//statt Rahmen zeichne ich den verdammten Rect
   if (mScale > 0.0 && mScale <= 1.0)
   painter->fillRect(ladebalken,Qt::green);
   painter->restore();
