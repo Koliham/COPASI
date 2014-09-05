@@ -10,6 +10,7 @@
 
 CQBarEffect::CQBarEffect()
   : mScale(1.0)
+  , mValue(1.0)
 {
 }
 
@@ -21,6 +22,12 @@ void CQBarEffect::setScale(qreal scale)
 {
   mScale = scale;
 }
+
+void CQBarEffect::setValue(qreal wert)
+{
+  mValue = wert;
+}
+
 
 void CQBarEffect::draw(QPainter* painter)
 {
@@ -54,7 +61,8 @@ void CQBarEffect::draw(QPainter* painter)
   //dünner Rahmen
 
   painter->drawRect(ort);//statt Rahmen zeichne ich den verdammten Rect
-  if (mScale > 0.0 && mScale <= 1.0)
+  if (mScale > 0.0 && mScale <= 10.0)
   painter->fillRect(ladebalken,Qt::green);
+  painter->drawText(offset.x()+rect.width(),offset.y()+20,QString::number(mValue));
   painter->restore();
 }

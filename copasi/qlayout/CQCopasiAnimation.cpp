@@ -47,7 +47,9 @@ void CQCopasiAnimation::removeFromScene(CQLayoutScene& scene)
     }
 }
 
-void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step) //= 0;
+
+
+void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values) //= 0;
 {
   scales.clear();
   std::vector<CQEffectDescription*>::iterator it = mEntries.begin();
@@ -58,17 +60,32 @@ void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step) //= 0;
       ++it;
     }
 }
-void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step)
+void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step, bool concentrationflag)
 {
-  std::vector<qreal> scales; getScales(scales, step);
+	//if (concentrationflag == true)
+  std::vector<qreal> values;
+
+  std::vector<qreal> scales; getScales(scales, step, values);
+  
+
 
   if (scales.size() != mEntries.size())
     return;
-
+  if (concentrationflag == true)
+  {
+  for (size_t i = 0; i < scales.size(); ++i)
+    {
+      mEntries[i]->applyToScene(scene, scales[i], values[i]);
+    }
+  }
+  else
+  {
   for (size_t i = 0; i < scales.size(); ++i)
     {
       mEntries[i]->applyToScene(scene, scales[i]);
     }
+  }
+
 }
 
 CQCopasiAnimation::ScaleMode CQCopasiAnimation::getScaleMode() const

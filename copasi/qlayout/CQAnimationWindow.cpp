@@ -202,7 +202,7 @@ public:
     return series->getData(step, getIndex(series, cn));
   }
 
-  virtual void getScales(std::vector<qreal>& scales, int step)
+  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values)
   {
     if (mpDataModel == NULL) return;
 
@@ -220,16 +220,22 @@ public:
       return;
 
     double max = mMode == CQCopasiAnimation::Global ? getMax(series) : 0;
-
+			
     for (size_t i = 0; i < mEntries.size(); ++i)
       {
         if (mMode == CQCopasiAnimation::Individual)
           max  = getMax(series, getIndex(series, mEntries[i]->getCN()));
-
+		 
         double value = getValue(series, mEntries[i]->getCN(), step);
-        scales.push_back(value / max);
+		double wert = series->getConcentrationData(step, i+1);
+        //Test, ob es geht, wenn ich nur den value pushe
+		scales.push_back(value / max);
+		//scales.push_back(value/601000000000000000000.0);
+		values.push_back(wert);
       }
   }
+
+	// Get Values
 
   virtual void initialize(const CCopasiDataModel &dataModel)
   {
@@ -412,11 +418,11 @@ void CQAnimationWindow::setAnimation(CQCopasiAnimation* animation, CCopasiDataMo
 
 void CQAnimationWindow::slotShowStep(int step)
 {
-  statusBar()->showMessage(QString("Displaying step %1").arg(step + 1), 1000);
+  statusBar()->showMessage(QString("Displaying steppy %1").arg(step + 1), 1000);
 
   if (mAnimation == NULL) return;
 
-  mAnimation->applyToScene(*mpScene, step);
+  mAnimation->applyToScene(*mpScene, step, true);
   mpControls->setNumSteps(mAnimation->getNumSteps());
   mpScene->update();
 }

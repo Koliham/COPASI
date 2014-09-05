@@ -110,7 +110,7 @@ void CQEffectDescription::removeFromScene(CQLayoutScene& scene)
   effect->setEnabled(false);
 }
 
-void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t)
+void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conce)
 {
   QGraphicsItem *item = scene.getItemFor(mCN);
 
@@ -155,6 +155,8 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t)
         CQBarEffect* effect = new CQBarEffect();
         //effect->setScale(linear(mScaleStart, mScaleEnd, t));
         effect->setScale(t);
+		if (conce != NULL)
+			effect->setValue(conce);
 		effect->setEnabled(true);
         item->setGraphicsEffect(effect);
       }
