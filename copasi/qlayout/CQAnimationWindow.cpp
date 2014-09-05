@@ -232,6 +232,7 @@ public:
 		scales.push_back(value / max);
 		//scales.push_back(value/601000000000000000000.0);
 		values.push_back(wert);
+		//scales.push_back(wert);
       }
   }
 

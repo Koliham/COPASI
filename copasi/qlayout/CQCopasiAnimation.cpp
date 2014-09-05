@@ -60,6 +60,8 @@ void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step, std::vec
       ++it;
     }
 }
+
+
 void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step, bool concentrationflag)
 {
 	//if (concentrationflag == true)

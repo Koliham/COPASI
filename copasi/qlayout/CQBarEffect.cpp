@@ -10,7 +10,7 @@
 
 CQBarEffect::CQBarEffect()
   : mScale(1.0)
-  , mValue(1.0)
+  , mValue(NULL)
 {
 }
 

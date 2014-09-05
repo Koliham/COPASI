@@ -46,7 +46,7 @@ public:
 
   virtual void removeFromScene(CQLayoutScene& scene);
 
-  void applyToScene(CQLayoutScene& scene, qreal t, qreal conce = 7);
+  void applyToScene(CQLayoutScene& scene, qreal t, qreal conce = NULL);
 
 protected:
   std::string mCN;

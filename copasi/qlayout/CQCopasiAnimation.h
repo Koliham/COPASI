@@ -26,7 +26,8 @@ public:
   virtual ~CQCopasiAnimation();
   virtual void removeFromScene(CQLayoutScene& scene);
   virtual void initialize(const CCopasiDataModel &model) = 0;
-  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values); //= 0;
+  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values); 
+ // virtual void getScales(std::vector<qreal>& scales, int step); // The old one with just 2 arguments
   virtual void applyToScene(CQLayoutScene& scene, int step, bool concentrationflag = false);
   virtual int getNumSteps();
   ScaleMode getScaleMode() const;
