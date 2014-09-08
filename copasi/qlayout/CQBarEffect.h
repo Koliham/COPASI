@@ -18,12 +18,14 @@ public:
   virtual ~CQBarEffect();
   void setScale(qreal scale);
   void setValue(qreal wert);
+  void setChange(qreal change);
 
 protected:
   void draw(QPainter* painter);
 
   qreal mScale;
   qreal mValue;
+  qreal mChange;
 };
 
 #endif // QBAR_EFFECT_H

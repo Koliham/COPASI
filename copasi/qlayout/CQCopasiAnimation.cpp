@@ -77,7 +77,7 @@ void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step, bool concen
   {
   for (size_t i = 0; i < scales.size(); ++i)
     {
-      mEntries[i]->applyToScene(scene, scales[i], values[i]);
+      mEntries[i]->applyToScene(scene, scales[i], values[i*2], values[i*2+1]);
     }
   }
   else

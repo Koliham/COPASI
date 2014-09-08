@@ -11,6 +11,7 @@
 CQBarEffect::CQBarEffect()
   : mScale(1.0)
   , mValue(NULL)
+  , mChange(0.0)
 {
 }
 
@@ -21,6 +22,11 @@ CQBarEffect::~CQBarEffect()
 void CQBarEffect::setScale(qreal scale)
 {
   mScale = scale;
+}
+
+void CQBarEffect::setChange(qreal change)
+{
+  mChange = change;
 }
 
 void CQBarEffect::setValue(qreal wert)
@@ -53,9 +59,9 @@ void CQBarEffect::draw(QPainter* painter)
   //QPointF rahmenol(offset.x(),offset.y());
   //QPointF rahmenur(offset.x()+41,offset.y()+21);
   QPointF rahmenol(offset.x(),offset.y());
-  QPointF rahmenur(offset.x()+rect.width(),offset.y()+5+1);
+  QPointF rahmenur(offset.x()+rect.width()-1,offset.y()+5+1);
   QPoint balkenol(offset.x()+1,offset.y()+1);
-  QPoint balkenur(offset.x()+(rect.width()-1)*(mScale), offset.y()+5);
+  QPoint balkenur(offset.x()+(rect.width()-2)*(mScale), offset.y()+5);
   QRectF ort(rahmenol,rahmenur);
   QRectF ladebalken(balkenol,balkenur);
   //dünner Rahmen
@@ -63,6 +69,17 @@ void CQBarEffect::draw(QPainter* painter)
   painter->drawRect(ort);//statt Rahmen zeichne ich den verdammten Rect
   if (mScale > 0.0 && mScale <= 10.0)
   painter->fillRect(ladebalken,Qt::green);
-  painter->drawText(offset.x()+rect.width(),offset.y()+20,QString::number(mValue));
+  
+  QPen pen(Qt::black);
+  if (mChange == -1.0)
+  pen.setColor(Qt::red);
+
+  if (mChange == 1.0)
+	  pen.setColor(Qt::darkGreen);
+
+  painter->setPen(pen);
+  
+  //painter->drawText(offset.x()+rect.width(),offset.y()+20,QString::number(mValue));
+  painter->drawText(offset.x()+(rect.width()/9.0),offset.y()+rect.width()*0.9,QString::number(mValue));
   painter->restore();
 }

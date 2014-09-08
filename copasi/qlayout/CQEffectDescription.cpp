@@ -110,7 +110,7 @@ void CQEffectDescription::removeFromScene(CQLayoutScene& scene)
   effect->setEnabled(false);
 }
 
-void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conce)
+void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conce, qreal change)
 {
   QGraphicsItem *item = scene.getItemFor(mCN);
 
@@ -157,6 +157,7 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
         effect->setScale(t);
 		if (conce != NULL)
 			effect->setValue(conce);
+		effect->setChange(change);
 		effect->setEnabled(true);
         item->setGraphicsEffect(effect);
       }

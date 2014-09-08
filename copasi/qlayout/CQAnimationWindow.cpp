@@ -202,7 +202,7 @@ public:
     return series->getData(step, getIndex(series, cn));
   }
 
-  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values)
+  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values = std::vector<qreal>())
   {
     if (mpDataModel == NULL) return;
 
@@ -228,15 +228,34 @@ public:
 		 
         double value = getValue(series, mEntries[i]->getCN(), step);
 		double wert = series->getConcentrationData(step, i+1);
-        //Test, ob es geht, wenn ich nur den value pushe
 		scales.push_back(value / max);
-		//scales.push_back(value/601000000000000000000.0);
 		values.push_back(wert);
-		//scales.push_back(wert);
-      }
+
+				//get the previous value and compare it with the actual value
+        if (step != 0)
+		{
+			double lastvalue = series->getConcentrationData(step-1,i+1);
+			if (lastvalue < wert)
+				{
+				values.push_back(1.0);
+				}
+			else if (lastvalue > wert)
+				{
+				values.push_back(-1.0);
+				}
+			else
+				{
+				values.push_back(0.0);
+				}
+		}
+		else
+		{
+			values.push_back(0.0);
+		}
+	}
   }
 
-	// Get Values
+	// Values contains now the concentration AND the change from the previous concentration
 
   virtual void initialize(const CCopasiDataModel &dataModel)
   {
