@@ -56,12 +56,12 @@ void CQBarEffect::draw(QPainter* painter)
   painter->drawPixmap(newOffset, transformed);
   
   
-  //QPointF rahmenol(offset.x(),offset.y());
-  //QPointF rahmenur(offset.x()+41,offset.y()+21);
   QPointF rahmenol(offset.x(),offset.y());
-  QPointF rahmenur(offset.x()+rect.width()-1,offset.y()+5+1);
+  //QPointF rahmenur(offset.x()+rect.width()-1,offset.y()+5+1);
+  QPointF rahmenur(offset.x()+rect.width()-1,offset.y()+(rect.height()/10.0)+1);
   QPoint balkenol(offset.x()+1,offset.y()+1);
-  QPoint balkenur(offset.x()+(rect.width()-2)*(mScale), offset.y()+5);
+  //QPoint balkenur(offset.x()+(rect.width()-2)*(mScale), offset.y()+5);
+  QPoint balkenur(offset.x()+(rect.width()-2)*(mScale), offset.y()+(rect.height()/10.0));
   QRectF ort(rahmenol,rahmenur);
   QRectF ladebalken(balkenol,balkenur);
   //dünner Rahmen
@@ -78,8 +78,12 @@ void CQBarEffect::draw(QPainter* painter)
 	  pen.setColor(Qt::darkGreen);
 
   painter->setPen(pen);
-  
+  QFont font = painter->font() ;
+  font.setPointSizeF(rect.width()/4.5);
+  painter->setFont(font);
   //painter->drawText(offset.x()+rect.width(),offset.y()+20,QString::number(mValue));
-  painter->drawText(offset.x()+(rect.width()/9.0),offset.y()+rect.width()*0.9,QString::number(mValue));
+  //painter->drawText(offset.x()+(rect.width()/9.0),offset.y()+rect.width()*0.9,QString::number(mValue));
+  painter->drawText(offset.x()+(rect.width()/11.0),offset.y()+rect.height()-(rect.height()/9.0),QString::number(mValue));
+  //painter->drawText(offset.x()+rect.width(),offset.y()+rect.height()-(rect.height()/9.0),QString::number(rect.height()));//anderen Wert
   painter->restore();
 }
