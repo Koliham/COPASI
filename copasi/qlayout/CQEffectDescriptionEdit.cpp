@@ -71,6 +71,10 @@ void CQEffectDescriptionEdit::initFrom(const CQEffectDescription* other, bool mu
         radBar->setChecked(true);
         break;
 
+      case CQEffectDescription::Gauge:
+        radGauge->setChecked(true);
+        break;
+
       default:
       case CQEffectDescription::Scale:
         radScale->setChecked(true);
@@ -91,6 +95,8 @@ void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multipl
     other->setMode(CQEffectDescription::DropShadow);
   else if (radBar->isChecked())
     other->setMode(CQEffectDescription::Bar);
+  else if (radGauge->isChecked())
+    other->setMode(CQEffectDescription::Gauge);
   else
     other->setMode(CQEffectDescription::Scale);
 }
