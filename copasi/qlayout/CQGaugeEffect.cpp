@@ -87,7 +87,7 @@ for (int i = 0; i <= 8; i=i+1)
    if (i != 8)
     painter->fillPath(path,gradient);
    //optional, small black lines, if you want
-   /*
+   
    QPen pen(Qt::black);
    pen.setWidthF(rectangle.width()/100.0);
 
@@ -95,18 +95,16 @@ for (int i = 0; i <= 8; i=i+1)
 
    if (i ==0 || i == 8)
         {
-       pen.setWidthF(pen.widthF()+1.0);
+       //pen.setWidthF(pen.widthF()+1.0);
     strich2.setX(midpoint.x()+(rectangle.width()*0.3)*cos(M_PI*((5.0/6.0)+i*(1.0/6.0))));
     strich2.setY(midpoint.y()+(rectangle.width()*0.3)*sin(M_PI*((5.0/6.0)+i*(1.0/6.0))));
    }
 
-   if(i==4)
-        {
-       pen.setWidthF(pen.widthF()+1.0);
-        strich2.setY(midpoint.y()+(rectangle.width()*0.35)*sin(M_PI*((5.0/6.0)+i*(1.0/6.0))));
-        }
+
    painter->setPen(pen);
-   painter->drawLine(strich1,strich2);*/
+   painter->drawLine(strich1,strich2);
+   //end of the optional black lines
+   
     }
 
   ////////////DRAWING THE GAUGE/////////////////
@@ -119,14 +117,15 @@ for (int i = 0; i <= 8; i=i+1)
 //QPixmap bild("D:/Qt/Projekte/painter1/gauge1.png");
 //painter->drawPixmap(offset.x(),offset.y(),rect.width(),rect.height(),bild);
 
-
+	qreal startvalue = 5.0/6.0; //startangle of the gauge at 5/6 of 180 degree
+    qreal span = 2.0/3.0; // the wing span of the gauge
 
     QPointF basis(offset.x()+(rect.width()/2.0),offset.y()+(rect.height()/2.0));
-    QPointF boden1(basis.x()+(rect.width()/12)*cos(k*0.8+(mScale*k*0.75)),basis.y()+(rect.width()/12)*sin(k*0.8+(mScale*k*0.75)));
-    QPointF boden2(basis.x()+(rect.width()/12)*cos(k*0.95+(mScale*k*0.75)),basis.y()+(rect.width()/12)*sin(k*0.95+(mScale*k*0.75)));
+    QPointF boden1(basis.x()+(rect.width()/12)*cos(M_PI*(9.0/6.0)+(mScale*k*span)),basis.y()+(rect.width()/12)*sin(M_PI*(9.0/6.0)+(mScale*k*span)));
+    QPointF boden2(basis.x()+(rect.width()/12)*cos(M_PI*(1.0/6.0)+(mScale*k*span)),basis.y()+(rect.width()/12)*sin(M_PI*(1.0/6.0)+(mScale*k*span)));
 
     qreal laenge = rect.width()*0.4;
-    QPoint spitze(basis.x()+cos((k*0.375)+(mScale*k*0.75))*laenge,basis.y()+sin((k*0.375)+(mScale*k*0.75))*laenge);
+    QPoint spitze(basis.x()+cos((M_PI*startvalue)+(mScale*k*span))*laenge,basis.y()+sin((M_PI*startvalue)+(mScale*k*span))*laenge);
 
 
 QPainterPath path;
@@ -134,7 +133,6 @@ path.moveTo(boden1);
 path.lineTo(boden2);
 path.lineTo(spitze);
 path.lineTo(boden1);
-//painter->fillPath(path,QColor(255,127,0));
 painter->fillPath(path,QColor(255,0,255));
 //////////////////
 
