@@ -160,6 +160,7 @@ protected:
 class QTimeCourseAnimation : public CQCopasiAnimation
 {
 public:
+	
   double getMax(const CTimeSeries* series, size_t index = C_INVALID_INDEX)
   {
     double max = 0;
@@ -283,7 +284,7 @@ public:
     mNumSteps = series->getRecordedSteps();
   }
 protected:
-  std::map<std::string, std::string> keyMap;
+  std::map<std::string, std::string> keyMap; std::vector<qreal> medians;
 };
 
 CQAnimationWindow::CQAnimationWindow(CLayout* layout, CCopasiDataModel* dataModel)

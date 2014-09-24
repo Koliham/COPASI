@@ -16,6 +16,12 @@ qreal linear(qreal a, qreal b, qreal t)
   return a * (1 - t) + b * t;
 }
 
+// A function with f(start) = 0, f(end) = 1
+qreal percentage(qreal start, qreal end, qreal value)
+{
+	return ((1/(end-start))*value)-(start/(end-start)); 
+}
+
 /**
  * Interpolate between a, and b
  *
@@ -44,6 +50,8 @@ CQEffectDescription::CQEffectDescription(const std::string& cn, Mode mode, const
   , mEndColor(endColor)
   , mScaleStart(0.5)
   , mScaleEnd(2.0)
+  , mGaugeStart(0.0)
+  , mGaugeEnd(0.0)
   , mMode(mode)
 {
 }
@@ -54,6 +62,8 @@ CQEffectDescription::CQEffectDescription(const std::string& cn, qreal startScale
   , mEndColor(Qt::red)
   , mScaleStart(startScale)
   , mScaleEnd(endScale)
+  , mGaugeStart(0.0)
+  , mGaugeEnd(0.0)
   , mMode(Scale)
 {
 }
@@ -85,6 +95,16 @@ qreal CQEffectDescription::getScaleStart() const
 qreal CQEffectDescription::getScaleEnd() const
 {
   return mScaleEnd;
+}
+
+qreal CQEffectDescription::getGaugeStart() const
+{
+  return mGaugeStart;
+}
+
+qreal CQEffectDescription::getGaugeEnd() const
+{
+  return mGaugeEnd;
 }
 
 CQEffectDescription::Mode CQEffectDescription::getMode() const
@@ -163,10 +183,31 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
       }
       break;
 
+      case AutoGauge:
+      {
+        CQBarEffect* effect = new CQBarEffect();
+        effect->setScale(linear(mGaugeStart, mGaugeEnd, t));
+		if (conce != NULL)
+			effect->setValue(conce);
+		effect->setChange(change);
+		effect->setEnabled(true);
+        item->setGraphicsEffect(effect);
+      }
+      break;
+
       case Gauge:
       {
         CQGaugeEffect* effect = new CQGaugeEffect();
-        effect->setScale(t);
+		
+		if (mGaugeEnd == 0.0)
+		{
+			effect->setScale(t);
+		}
+		else
+		{
+			effect->setScale(percentage(mGaugeStart,mGaugeEnd,conce));
+		}
+		
 		if (conce != NULL)
 			effect->setValue(conce);
 		effect->setChange(change);
@@ -201,4 +242,14 @@ void CQEffectDescription::setScaleStart(qreal scale)
 void CQEffectDescription::setScaleEnd(qreal scale)
 {
   mScaleEnd = scale;
+}
+
+void CQEffectDescription::setGaugeStart(qreal scale)
+{
+  mGaugeStart = scale;
+}
+
+void CQEffectDescription::setGaugeEnd(qreal scale)
+{
+  mGaugeEnd = scale;
 }

@@ -56,6 +56,9 @@ void CQEffectDescriptionEdit::initFrom(const CQEffectDescription* other, bool mu
 
   txtScaleStart->setText(QString::number(other->getScaleStart()));
   txtScaleEnd->setText(QString::number(other->getScaleEnd()));
+  //For the Gauge
+  txtGaugeStart->setText(QString::number(other->getGaugeStart()));
+  txtGaugeEnd->setText(QString::number(other->getGaugeEnd()));
 
   switch (other->getMode())
     {
@@ -75,6 +78,12 @@ void CQEffectDescriptionEdit::initFrom(const CQEffectDescription* other, bool mu
         radGauge->setChecked(true);
         break;
 
+      case CQEffectDescription::AutoGauge:
+        radGauge->setChecked(true);
+		checkautoadjust->setEnabled(true);
+		checkautoadjust->setChecked(true);
+        break;
+
       default:
       case CQEffectDescription::Scale:
         radScale->setChecked(true);
@@ -88,6 +97,8 @@ void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multipl
   other->setEndColor(txtColorEnd->palette().color(QPalette::Background));
   other->setScaleStart(txtScaleStart->text().toDouble());
   other->setScaleEnd(txtScaleEnd->text().toDouble());
+  other->setGaugeStart(txtGaugeStart->text().toDouble());
+  other->setGaugeEnd(txtGaugeEnd->text().toDouble());
 
   if (radColorize->isChecked())
     other->setMode(CQEffectDescription::Colorize);
@@ -95,6 +106,8 @@ void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multipl
     other->setMode(CQEffectDescription::DropShadow);
   else if (radBar->isChecked())
     other->setMode(CQEffectDescription::Bar);
+  else if (radGauge->isChecked() && checkautoadjust->isChecked())
+    other->setMode(CQEffectDescription::AutoGauge);
   else if (radGauge->isChecked())
     other->setMode(CQEffectDescription::Gauge);
   else
@@ -109,6 +122,8 @@ CQEffectDescription* CQEffectDescriptionEdit::toDescription() const
   result->setEndColor(txtColorEnd->palette().color(QPalette::Background));
   result->setScaleStart(txtScaleStart->text().toDouble());
   result->setScaleEnd(txtScaleEnd->text().toDouble());
+  result->setGaugeStart(txtGaugeStart->text().toDouble());
+  result->setGaugeEnd(txtGaugeEnd->text().toDouble());
 
   if (radColorize->isChecked())
     result->setMode(CQEffectDescription::Colorize);
@@ -116,6 +131,10 @@ CQEffectDescription* CQEffectDescriptionEdit::toDescription() const
     result->setMode(CQEffectDescription::DropShadow);
   else if (radBar->isChecked())
     result->setMode(CQEffectDescription::Bar);
+  else if (radGauge->isChecked() && checkautoadjust->isChecked())
+    result->setMode(CQEffectDescription::AutoGauge);
+  else if (radGauge->isChecked())
+    result->setMode(CQEffectDescription::Gauge);
   else
     result->setMode(CQEffectDescription::Scale);
 

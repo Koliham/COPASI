@@ -24,6 +24,10 @@ CQGaugeEffect::~CQGaugeEffect()
 void CQGaugeEffect::setScale(qreal scale)
 {
   mScale = scale;
+  if (scale > 1.0)
+	  mScale = 1.0;
+  if (scale < 0.0)
+	  mScale = 0.0;
 }
 
 void CQGaugeEffect::setChange(qreal change)
@@ -111,29 +115,28 @@ for (int i = 0; i <= 8; i=i+1)
 
   
   
-  double k = M_PI*2;
 
   //It is also possible to take a picture
 //QPixmap bild("D:/Qt/Projekte/painter1/gauge1.png");
 //painter->drawPixmap(offset.x(),offset.y(),rect.width(),rect.height(),bild);
 
-	qreal startvalue = 5.0/6.0; //startangle of the gauge at 5/6 of 180 degree
+qreal startvalue = 5.0/6.0; //startangle of the gauge at 5/6 of 180 degree
     qreal span = 2.0/3.0; // the wing span of the gauge
-
+    qreal k = M_PI*2;
     QPointF basis(offset.x()+(rect.width()/2.0),offset.y()+(rect.height()/2.0));
-    QPointF boden1(basis.x()+(rect.width()/12)*cos(M_PI*(9.0/6.0)+(mScale*k*span)),basis.y()+(rect.width()/12)*sin(M_PI*(9.0/6.0)+(mScale*k*span)));
-    QPointF boden2(basis.x()+(rect.width()/12)*cos(M_PI*(1.0/6.0)+(mScale*k*span)),basis.y()+(rect.width()/12)*sin(M_PI*(1.0/6.0)+(mScale*k*span)));
+    QPointF boden1(basis.x()+(rect.width()/12)*cos(M_PI*(9.0/6.0)+(mScale*k*span)),basis.y()+(rect.height()/12)*sin(M_PI*(9.0/6.0)+(mScale*k*span)));
+    QPointF boden2(basis.x()+(rect.width()/12)*cos(M_PI*(1.0/6.0)+(mScale*k*span)),basis.y()+(rect.height()/12)*sin(M_PI*(1.0/6.0)+(mScale*k*span)));
 
-    qreal laenge = rect.width()*0.4;
-    QPoint spitze(basis.x()+cos((M_PI*startvalue)+(mScale*k*span))*laenge,basis.y()+sin((M_PI*startvalue)+(mScale*k*span))*laenge);
+    //qreal laenge = sqrt(rect.width()*rect.width()+rect.height()*rect.height())*0.4;
+    QPoint spitze(basis.x()+cos((M_PI*startvalue)+(mScale*M_PI*2*span))*rect.width()*0.4,basis.y()+sin((M_PI*startvalue)+(mScale*k*span))*rect.height()*0.4);
 
 
-QPainterPath path;
-path.moveTo(boden1);
-path.lineTo(boden2);
-path.lineTo(spitze);
-path.lineTo(boden1);
-painter->fillPath(path,QColor(255,0,255));
+QPainterPath pointer;
+pointer.moveTo(boden1);
+pointer.lineTo(boden2);
+pointer.lineTo(spitze);
+pointer.lineTo(boden1);
+painter->fillPath(pointer,QColor(255,0,255));
 //////////////////
 
   QPen pen(Qt::black);

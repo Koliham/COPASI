@@ -20,7 +20,8 @@ public:
     Colorize,
     Scale,
 	Bar,
-	Gauge
+	Gauge,
+	AutoGauge
   };
 
   CQEffectDescription(const std::string& cn, qreal startScale, qreal endScale);
@@ -41,6 +42,12 @@ public:
 
   qreal getScaleEnd() const;
   void setScaleEnd(qreal scale);
+  
+  qreal getGaugeStart() const;
+  void setGaugeStart(qreal scale);
+
+  qreal getGaugeEnd() const;
+  void setGaugeEnd(qreal scale);
 
   Mode getMode() const;
   void setMode(Mode mode);
@@ -55,6 +62,8 @@ protected:
   QColor mEndColor;
   qreal  mScaleStart;
   qreal mScaleEnd;
+  qreal mGaugeStart;
+  qreal mGaugeEnd;
   Mode mMode;
 };
 
