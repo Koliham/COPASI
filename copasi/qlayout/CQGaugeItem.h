@@ -16,10 +16,14 @@ class CQGaugeItem : public QObject, public QGraphicsItem
    CQGaugeItem();
    QRectF boundingRect() const;
    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+   void setValue(qreal wert);
 
 public slots:
    void dragLeaveEvent();
    void dragMoveEvent();
+
+protected:
+	qreal xpos, ypos, height, width, mScale;
 
 };
 

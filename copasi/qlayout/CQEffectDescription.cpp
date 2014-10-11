@@ -62,7 +62,7 @@ CQEffectDescription::CQEffectDescription(const std::string& cn, Mode mode, const
   , mGaugeEnd(0.0)
   , mMode(mode)
   , mCaption(OffLegend)
-  , shown(false)
+  , shown(0)
   , legend(new CQGaugeItem())
 {
 }
@@ -77,10 +77,11 @@ CQEffectDescription::CQEffectDescription(const std::string& cn, qreal startScale
   , mGaugeEnd(0.0)
   , mMode(Scale)
   , mCaption(OffLegend)
-  , shown(false)
+  , shown(0)
   , legend(new CQGaugeItem())
 {
 }
+
 
 CQEffectDescription::~CQEffectDescription()
 {
@@ -171,15 +172,39 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
 	  mGaugeStart = leftborder;
 	  mGaugeEnd = rightborder;
   }
+  QList<QGraphicsItem*> alltheitems;
+  alltheitems = scene.items();
+  if (alltheitems.contains(legend))
+  {
 
- // if (mCaption == CQEffectDescription::OnLegend)
-	
-	//if (shown == false)
-	//{
-	////	legend = new CQGaugeItem();
-	//	scene.addItem(legend);
-	//	shown = true;
-	//}
+  }
+
+
+    if (mCaption == CQEffectDescription::OffLegend && alltheitems.contains(legend))
+	  scene.removeItem(legend);
+
+  if (mCaption == CQEffectDescription::OnLegend)
+  {
+	  if (!(alltheitems.contains(legend)))
+	  {
+
+	//add the item to the scene
+
+			legend = new CQGaugeItem();
+			legend->setValue(t);
+			//legend->update();
+			scene.addItem(legend);
+			//legend->update();
+	  }
+	  else
+	  {
+		  legend->setValue(t);
+	  }
+  }
+
+
+	//legend->setValue(t);
+	//legend->update();
 
   switch (mMode)
     {

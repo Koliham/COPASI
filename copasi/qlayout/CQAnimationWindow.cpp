@@ -558,7 +558,7 @@ void CQAnimationWindow::setAnimation(CQCopasiAnimation* animation, CCopasiDataMo
 
 void CQAnimationWindow::slotShowStep(int step)
 {
-  statusBar()->showMessage(QString("Displaying steppy %1").arg(step + 1), 1000);
+  statusBar()->showMessage(QString("Displaying step %1").arg(step + 1), 1000);
 
   if (mAnimation == NULL) return;
 

@@ -78,7 +78,7 @@ protected:
   Mode mMode;
   Caption mCaption;
   CQGaugeItem* legend;
-  bool shown;
+  int shown;
 };
 
 #endif // QEFFECT_DESCRIPTION_H
