@@ -22,21 +22,31 @@ public:
     Individual
   };
 
+  enum Fitting
+  {
+	  ManualFit,
+	  AutoFit
+  };
+
+
   CQCopasiAnimation();
   virtual ~CQCopasiAnimation();
   virtual void removeFromScene(CQLayoutScene& scene);
   virtual void initialize(const CCopasiDataModel &model) = 0;
-  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values = std::vector<qreal>()); 
+  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values = std::vector<qreal>(), std::vector<qreal>& borders = std::vector<qreal>()); 
  // virtual void getScales(std::vector<qreal>& scales, int step); // The old one with just 2 arguments
   virtual void applyToScene(CQLayoutScene& scene, int step, bool concentrationflag = false);
   virtual int getNumSteps();
   ScaleMode getScaleMode() const;
   void setScaleMode(ScaleMode mode);
+  Fitting getFittingMode() const; // created for AutoFit
+  void setFittingMode(Fitting mode);
   std::vector<CQEffectDescription*>& getEntries();
 protected:
   std::vector<CQEffectDescription*> mEntries;
   const CCopasiDataModel* mpDataModel;
   ScaleMode mMode;
+  Fitting mFitting; // where I save the Fitting Information
   int mNumSteps; // populate with the number of steps
 public:
 	std::vector<qreal> values;

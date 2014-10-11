@@ -10,6 +10,7 @@
 #include <string>
 
 #include <qlayout/CQLayoutScene.h>
+#include <qlayout/CQGaugeItem.h>
 
 class CQEffectDescription
 {
@@ -22,6 +23,12 @@ public:
 	Bar,
 	Gauge,
 	AutoGauge
+  };
+
+  enum Caption
+  {
+	  OnLegend,
+	  OffLegend
   };
 
   CQEffectDescription(const std::string& cn, qreal startScale, qreal endScale);
@@ -52,9 +59,13 @@ public:
   Mode getMode() const;
   void setMode(Mode mode);
 
+  //for the Legends
+  Caption getCaption() const;
+  void setCaption(Caption caption);
+
   virtual void removeFromScene(CQLayoutScene& scene);
 
-  void applyToScene(CQLayoutScene& scene, qreal t, qreal conce = NULL, qreal change = 0.0);
+  void applyToScene(CQLayoutScene& scene, qreal t, qreal conce = 0.0, qreal change = 0.0, qreal leftborder = 0.0, qreal rightborder = 0.0);
 
 protected:
   std::string mCN;
@@ -65,6 +76,9 @@ protected:
   qreal mGaugeStart;
   qreal mGaugeEnd;
   Mode mMode;
+  Caption mCaption;
+  CQGaugeItem* legend;
+  bool shown;
 };
 
 #endif // QEFFECT_DESCRIPTION_H

@@ -78,17 +78,24 @@ void CQEffectDescriptionEdit::initFrom(const CQEffectDescription* other, bool mu
         radGauge->setChecked(true);
         break;
 
-      case CQEffectDescription::AutoGauge:
-        radGauge->setChecked(true);
-		checkautoadjust->setEnabled(true);
-		checkautoadjust->setChecked(true);
-        break;
 
       default:
       case CQEffectDescription::Scale:
         radScale->setChecked(true);
         break;
     }
+  //for the Legend
+  switch (other->getCaption())
+  {
+  case CQEffectDescription::OnLegend:
+	  checkautoadjust->setChecked(true);
+	  break;
+
+  default:
+	  checkautoadjust->setChecked(false);
+	  break;
+  }
+
 }
 
 void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multiple*/)
@@ -106,12 +113,17 @@ void CQEffectDescriptionEdit::saveTo(CQEffectDescription* other, bool /* multipl
     other->setMode(CQEffectDescription::DropShadow);
   else if (radBar->isChecked())
     other->setMode(CQEffectDescription::Bar);
-  else if (radGauge->isChecked() && checkautoadjust->isChecked())
-    other->setMode(CQEffectDescription::AutoGauge);
   else if (radGauge->isChecked())
     other->setMode(CQEffectDescription::Gauge);
   else
     other->setMode(CQEffectDescription::Scale);
+  
+  //for the Legend
+  if (checkautoadjust->isChecked())
+	  other->setCaption(CQEffectDescription::OnLegend);
+  else
+	  other->setCaption(CQEffectDescription::OffLegend);
+
 }
 
 CQEffectDescription* CQEffectDescriptionEdit::toDescription() const
@@ -131,12 +143,16 @@ CQEffectDescription* CQEffectDescriptionEdit::toDescription() const
     result->setMode(CQEffectDescription::DropShadow);
   else if (radBar->isChecked())
     result->setMode(CQEffectDescription::Bar);
-  else if (radGauge->isChecked() && checkautoadjust->isChecked())
-    result->setMode(CQEffectDescription::AutoGauge);
   else if (radGauge->isChecked())
     result->setMode(CQEffectDescription::Gauge);
   else
     result->setMode(CQEffectDescription::Scale);
+
+  //for the Legend
+    if (checkautoadjust->isChecked())
+	  result->setCaption(CQEffectDescription::OnLegend);
+  else
+	  result->setCaption(CQEffectDescription::OffLegend);
 
   return result;
 }

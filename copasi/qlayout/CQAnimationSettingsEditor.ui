@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<comment> Copyright (C) 2013 by Pedro Mendes, Virginia Tech Intellectual </comment>
-<comment> Properties, Inc., University of Heidelberg, and The University </comment>
-<comment> of Manchester. </comment>
-<comment> All rights reserved. </comment>
-
-
+ <comment> All rights reserved. </comment>
  <class>CQAnimationSettingsEditor</class>
  <widget class="QDialog" name="CQAnimationSettingsEditor">
   <property name="geometry">
@@ -52,6 +47,13 @@
        <widget class="QRadioButton" name="radIndividual">
         <property name="text">
          <string>Individual</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkAutoFit">
+        <property name="text">
+         <string>Auto Fit</string>
         </property>
        </widget>
       </item>

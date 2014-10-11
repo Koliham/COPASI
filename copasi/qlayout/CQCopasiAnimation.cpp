@@ -10,7 +10,8 @@ CQCopasiAnimation::CQCopasiAnimation():
   mEntries(),
   mpDataModel(NULL),
   mMode(CQCopasiAnimation::Global),
-  mNumSteps(0)
+  mNumSteps(0),
+  mFitting(CQCopasiAnimation::ManualFit)
 {}
 
 CQCopasiAnimation::~CQCopasiAnimation()
@@ -49,7 +50,7 @@ void CQCopasiAnimation::removeFromScene(CQLayoutScene& scene)
 
 
 
-void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values) //= 0;
+void CQCopasiAnimation::getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values, std::vector<qreal>& borders) //= 0;
 {
   scales.clear();
   std::vector<CQEffectDescription*>::iterator it = mEntries.begin();
@@ -66,8 +67,9 @@ void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step, bool concen
 {
 	//if (concentrationflag == true)
   std::vector<qreal> values;
+  std::vector<qreal> borders;
 
-  std::vector<qreal> scales; getScales(scales, step, values);
+  std::vector<qreal> scales; getScales(scales, step, values, borders);
   
 
 
@@ -77,8 +79,22 @@ void CQCopasiAnimation::applyToScene(CQLayoutScene& scene, int step, bool concen
   {
   for (size_t i = 0; i < scales.size(); ++i)
     {
-      mEntries[i]->applyToScene(scene, scales[i], values[i*2], values[i*2+1]);
-    }
+		//I want to add boundaries, but have to check, if I need individual oder global boundaries
+		
+		if (mFitting == CQCopasiAnimation::AutoFit) //boundaries are autocalculated, so it is needed for AutoFit
+		{
+			if (mMode == CQCopasiAnimation::Individual)
+			mEntries[i]->applyToScene(scene, scales[i], values[i*2], values[i*2+1], borders[i*2], borders[i*2+1]);
+    
+			if (mMode == CQCopasiAnimation::Global)
+				mEntries[i]->applyToScene(scene, scales[i], values[i*2], values[i*2+1], borders[borders.size()-2], borders[borders.size()-1]);
+		}
+		else //if no AutoFit, then we can ignore and give zero
+		{
+			mEntries[i]->applyToScene(scene, scales[i], values[i*2], values[i*2+1]);
+		}
+
+	}
   }
   else
   {
@@ -98,4 +114,14 @@ CQCopasiAnimation::ScaleMode CQCopasiAnimation::getScaleMode() const
 void CQCopasiAnimation::setScaleMode(CQCopasiAnimation::ScaleMode mode)
 {
   mMode = mode;
+}
+
+CQCopasiAnimation::Fitting CQCopasiAnimation::getFittingMode() const
+{
+	return mFitting;
+}
+
+void CQCopasiAnimation::setFittingMode(CQCopasiAnimation::Fitting mode)
+{
+	mFitting = mode;
 }

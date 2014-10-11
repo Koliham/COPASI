@@ -203,7 +203,7 @@ public:
     return series->getData(step, getIndex(series, cn));
   }
 
-  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values = std::vector<qreal>())
+  virtual void getScales(std::vector<qreal>& scales, int step, std::vector<qreal>& values = std::vector<qreal>(), std::vector<qreal>& borders = std::vector<qreal>())
   {
     if (mpDataModel == NULL) return;
 
@@ -221,7 +221,125 @@ public:
       return;
 
     double max = mMode == CQCopasiAnimation::Global ? getMax(series) : 0;
-			
+
+	//------------------------- Auto Fit Alogorithm-----------------------------
+
+	std::vector<qreal> medians;
+	std::vector<qreal> variance;
+	std::vector<qreal> average;
+	double maxvalue, minvalue;
+	size_t maxindex, minindex;
+	
+	//initializing the min and max medians of all the entries
+	maxvalue = 0.0; //these are GLOBAL min and max values
+	minvalue = series->getConcentrationData(0,1);
+	minindex = 0;
+	maxindex = 0;
+	if (analyseflag == false) //it checks, if the analysis was done, if not, it does
+	{
+		for (size_t i = 0; i < mEntries.size(); i++)
+		{
+			double sum = 0;
+			std::vector<qreal> tempvalues;
+
+			//it can happen that the fence is bigger than the spectrum, e.g. the lowest value is 4.0 but the borders allow
+			//values from 2.0 which doesnt make sense.
+			//So I am saving the max and min for each, these are INDIVIDUAL min/max values for each metabolite
+			double tempmin = series->getConcentrationData(0,i+1);
+			double tempmax = series->getConcentrationData(0,i+1);
+
+			for (size_t j = 0; j < mNumSteps; j++)
+			{
+				double actualvalue = series->getConcentrationData(j,i+1);
+				tempvalues.push_back(actualvalue);
+				sum += series->getConcentrationData(j,i+1);
+				//check, if the actual value is higher/lower than tempmin/max
+				if (actualvalue > tempmax)
+					tempmax = actualvalue;
+				if (actualvalue < tempmin)
+					tempmin = actualvalue;
+
+
+			}
+
+			average.push_back ( (double) sum / mNumSteps );
+			//sort
+			std::sort(tempvalues.begin(),tempvalues.end());
+			medians.push_back(tempvalues[mNumSteps/2]);
+			//
+			if (minvalue > medians[i])
+			{
+				minvalue = medians[i];
+				minindex = i;
+			}
+
+			if (maxvalue < medians[i])
+			{
+				maxvalue = medians[i];
+				maxindex = i;
+			}
+
+			//calculate the variance
+			double tempvar = 0; 
+			for (size_t j = 0; j < mNumSteps; j++)
+			{
+				double conc = series->getConcentrationData(j,i+1);
+				tempvar += (conc - average[i]) * (conc - average[i]);
+			}
+			tempvar = (double) tempvar / mNumSteps;
+			tempvar = sqrt(tempvar);
+			variance.push_back(tempvar);
+
+			//adding the boundaries for the gauge, if they are individual
+			//if (mMode == CQCopasiAnimation::Individual) 
+			//{ // I am adding the boundaries for all metabolites, so the first mEntries.size entries are for the individual boundaries
+				double lower = medians[i] - (2.0*variance[i]);
+				double upper = medians[i] + (2.0*variance[i]);
+				if (lower < 0)
+					lower = 0.0;
+				//check, if boundaries are lower/higher than the min/max value
+				if (lower < tempmin)
+					lower = tempmin;
+				if (upper > tempmax)
+					upper = tempmax;
+
+				boundary.push_back(lower);
+				boundary.push_back(upper);
+
+			//}
+
+
+		}
+		// I have a vector with the medians now
+
+		// if quotient is higher than 100, it means, there are huge gaps between the lowest and highest value
+		// needed for logarithmic values
+	
+		// and now the global boundaries
+		double lower = minvalue - (2.0*variance[minindex]);
+		if (lower < 0)
+			lower = 0.0;
+		double upper = maxvalue + (2.0*variance[maxindex]);
+		boundary.push_back(lower); // it must be "lower" here!!!
+		boundary.push_back(upper); // and upper
+		analyseflag = true;
+
+
+				if (minvalue == 0.0)
+			minvalue = 1.0; //to protect from division by zero
+
+		double quotient = maxvalue / minvalue;
+	}
+	else
+	{
+		for (int i = 0; i < boundary.size(); i++)
+		{
+			borders.push_back(boundary[i]);
+		}
+		
+	}
+	///---------------------AutoAdjust ---------------------------
+
     for (size_t i = 0; i < mEntries.size(); ++i)
       {
         if (mMode == CQCopasiAnimation::Individual)
@@ -282,9 +400,10 @@ public:
     if (series == NULL) return;
 
     mNumSteps = series->getRecordedSteps();
+	analyseflag = false;
   }
 protected:
-  std::map<std::string, std::string> keyMap; std::vector<qreal> medians;
+  std::map<std::string, std::string> keyMap; std::vector<qreal> boundary; bool analyseflag; 
 };
 
 CQAnimationWindow::CQAnimationWindow(CLayout* layout, CCopasiDataModel* dataModel)

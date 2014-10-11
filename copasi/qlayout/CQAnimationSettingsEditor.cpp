@@ -63,7 +63,10 @@ void CQAnimationSettingsEditor::initFrom(CQCopasiAnimation* other)
     radGlobal->setChecked(true);
   else
     radIndividual->setChecked(true);
-
+  if (other->getFittingMode() == CQCopasiAnimation::AutoFit)
+	  checkAutoFit->setChecked(true);
+  else
+	  checkAutoFit->setChecked(false);
   std::vector<CQEffectDescription*> entries = other->getEntries();
   std::vector<CQEffectDescription*>::iterator it = entries.begin();
   mEntries.clear();
@@ -89,4 +92,11 @@ void CQAnimationSettingsEditor::saveTo(CQCopasiAnimation* target)
     target->setScaleMode(CQCopasiAnimation::Global);
   else
     target->setScaleMode(CQCopasiAnimation::Individual);
+	
+  //Auto Fitting
+  if (checkAutoFit->isChecked())
+		target->setFittingMode(CQCopasiAnimation::AutoFit);
+  else
+		target->setFittingMode(CQCopasiAnimation::ManualFit);
+
 }

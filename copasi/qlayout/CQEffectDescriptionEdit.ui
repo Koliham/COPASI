@@ -68,10 +68,10 @@
       <item>
        <widget class="QCheckBox" name="checkautoadjust">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
-         <string>Auto Adjust</string>
+         <string>Add Legend</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
