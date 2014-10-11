@@ -5,20 +5,20 @@ CQGaugeItem::CQGaugeItem()
 {
    setFlag(ItemIsMovable);
    mScale = 0.0;
-   
-
+   mValue = 0.0;
+   mChange = 0.0;
 }
 
 QRectF CQGaugeItem::boundingRect() const
 {
-   return QRect(10,20,200,200);
+   return QRect(10,20,100,100);
 }
 void CQGaugeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 
    
    painter->setRenderHint(QPainter::Antialiasing);
-   QRectF rectangle(10.0, 20.0, 200.0, 200.0);
+   QRectF rectangle(10.0, 20.0, 100.0, 100.0);
 QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.height()*0.2,rectangle.width()*0.6,rectangle.height()*0.6);
     qreal startAngle;
     QPoint midpoint(rectangle.x()+rectangle.width()*0.5,rectangle.y()+rectangle.height()*0.5);
@@ -92,6 +92,23 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     pointer.lineTo(boden1);
     painter->fillPath(pointer,QColor(255,0,255));
    //Value
+
+	QPen pen(Qt::black);
+	 if (mChange == -1.0)
+		pen.setColor(Qt::red);
+	else if (mChange == 1.0)
+	  pen.setColor(Qt::darkGreen);
+	else
+		pen.setColor(Qt::black);
+
+	painter->setPen(pen);
+	QFont font = painter->font() ;
+	font.setPointSizeF(rectangle.height()/4.5);
+	painter->setFont(font);
+	if (mValue == 0.0)
+		painter->drawText(rectangle.x()+rectangle.width()*0.5,rectangle.y()+rectangle.height()+(rectangle.height()/8.0),QString::number(mValue));
+	else
+		painter->drawText(rectangle.x(),rectangle.y()+rectangle.height()+(rectangle.height()/8.0),QString::number(mValue));
 }
 
 void CQGaugeItem::dragMoveEvent()
@@ -102,6 +119,18 @@ void CQGaugeItem::dragMoveEvent()
 void CQGaugeItem::setValue(qreal wert)
 {
 	mScale = wert;
+	
+}
+
+void CQGaugeItem::setConcentration(qreal wert)
+{
+	mValue = wert;
+	
+}
+
+void CQGaugeItem::setChange(qreal wert)
+{
+	mChange = wert;
 	
 }
 

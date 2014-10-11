@@ -191,14 +191,26 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
 	//add the item to the scene
 
 			legend = new CQGaugeItem();
-			legend->setValue(t);
+			if (mGaugeEnd == 0.0)
+				legend->setValue(t);
+			else
+				legend->setValue(percentage(mGaugeStart,mGaugeEnd,conce));
+
+			legend->setConcentration(conce);
+			legend->setChange(change);
 			//legend->update();
 			scene.addItem(legend);
 			//legend->update();
 	  }
 	  else
 	  {
-		  legend->setValue(t);
+
+			if (mGaugeEnd == 0.0)
+				legend->setValue(t);
+			else
+				legend->setValue(percentage(mGaugeStart,mGaugeEnd,conce));
+		  legend->setConcentration(conce);
+		  legend->setChange(change);
 	  }
   }
 
