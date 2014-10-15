@@ -11,6 +11,7 @@
 #include <qlayout/CQBarEffect.h>
 #include <qlayout/CQGaugeEffect.h>
 #include <qlayout/CQGaugeItem.h>
+#include <regex>
 
 
 qreal linear(qreal a, qreal b, qreal t)
@@ -21,11 +22,14 @@ qreal linear(qreal a, qreal b, qreal t)
 // A function with f(start) = 0, f(end) = 1
 qreal percentage(qreal start, qreal end, qreal value)
 {
-	if (value <= 0.0 || value <= start)
+	if (value <= 0.0 )
 		return 0.0;
 
 	if (value >= end) //this lets the gauge be at maximum for nonzero and constant concentrations
 		return 1.0;
+
+	if (value <= start)
+		return 0.0;
 
 	return ((1/(end-start))*value)-(start/(end-start)); 
 }
@@ -178,7 +182,15 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
   {
 
   }
-
+    std::regex rx("Metabolites\\[.+\\]$");
+    std::smatch match;
+    std::regex_search(mCN,match,rx);
+    std::string name = match[0];
+        QString qname = QString::fromStdString(name);
+        qname.remove(QChar('['));
+        qname.remove(QChar(']'));
+		qname.remove(QString("Metabolites"));
+	 // qname = "Penis";
 
     if (mCaption == CQEffectDescription::OffLegend && alltheitems.contains(legend))
 	  scene.removeItem(legend);
@@ -197,6 +209,7 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
 				legend->setValue(percentage(mGaugeStart,mGaugeEnd,conce));
 
 			legend->setConcentration(conce);
+			legend->setText(qname);
 			legend->setChange(change);
 			//legend->update();
 			scene.addItem(legend);
@@ -210,6 +223,7 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
 			else
 				legend->setValue(percentage(mGaugeStart,mGaugeEnd,conce));
 		  legend->setConcentration(conce);
+		  legend->setText(qname);
 		  legend->setChange(change);
 	  }
   }

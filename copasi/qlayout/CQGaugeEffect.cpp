@@ -88,9 +88,22 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     path.arcTo(innerrect,startAngle-241.0,241.0);
     path.closeSubpath();
     QConicalGradient gradient(midpoint,220);
-    gradient.setColorAt(0.0,Qt::green);
-    gradient.setColorAt((2.0/3.0),Qt::yellow);
-    gradient.setColorAt(1.0,Qt::red);
+    gradient.setColorAt(0.0,QColor(140,255,140));
+    gradient.setColorAt((2.0/3.0),QColor(255,255,140));
+    gradient.setColorAt(1.0,QColor(255,140,140));
+
+	if (mScale >= 1.0)
+	{
+	gradient.setColorAt(0.0,QColor(140,255,140));
+    gradient.setColorAt((2.0/3.0),QColor(140,255,140));
+    gradient.setColorAt(1.0,QColor(140,255,140));
+	}
+	if (mScale <= 0.0)
+	{
+	gradient.setColorAt(0.0,QColor(255,140,140));
+    gradient.setColorAt((2.0/3.0),QColor(255,140,140));
+    gradient.setColorAt(1.0,QColor(255,140,140));
+	}
 
     painter->fillPath(path,gradient);
 
@@ -144,7 +157,7 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     pointer.lineTo(boden2);
     pointer.lineTo(spitze);
     pointer.lineTo(boden1);
-    painter->fillPath(pointer,QColor(255,0,255));
+    painter->fillPath(pointer,QColor(140,64,140));
 //////////////////
 
   QPen pen(Qt::black);

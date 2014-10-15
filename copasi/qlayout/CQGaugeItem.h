@@ -19,6 +19,7 @@ class CQGaugeItem : public QObject, public QGraphicsItem
    void setValue(qreal wert);
    void setConcentration(qreal wert);
    void setChange( qreal change);
+   void setText(QString text);
 
 public slots:
    void dragLeaveEvent();
@@ -26,6 +27,7 @@ public slots:
 
 protected:
 	qreal xpos, ypos, height, width, mScale, mValue, mChange;
+	QString mText;
 
 };
 

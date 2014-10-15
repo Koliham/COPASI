@@ -7,6 +7,7 @@ CQGaugeItem::CQGaugeItem()
    mScale = 0.0;
    mValue = 0.0;
    mChange = 0.0;
+   
 }
 
 QRectF CQGaugeItem::boundingRect() const
@@ -106,9 +107,11 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
 	font.setPointSizeF(rectangle.height()/4.5);
 	painter->setFont(font);
 	if (mValue == 0.0)
-		painter->drawText(rectangle.x()+rectangle.width()*0.5,rectangle.y()+rectangle.height()+(rectangle.height()/8.0),QString::number(mValue));
+		painter->drawText(rectangle.x()+rectangle.width()*0.45,rectangle.y()+rectangle.height()+(rectangle.height()/11.0),QString::number(mValue));
 	else
-		painter->drawText(rectangle.x(),rectangle.y()+rectangle.height()+(rectangle.height()/8.0),QString::number(mValue));
+		painter->drawText(rectangle.x(),rectangle.y()+rectangle.height()+(rectangle.height()/9.0),QString::number(mValue));
+
+	painter->drawText(rectangle.x()+rectangle.width()*1.1,rectangle.y()+rectangle.height()*0.5,mText);
 }
 
 void CQGaugeItem::dragMoveEvent()
@@ -118,13 +121,25 @@ void CQGaugeItem::dragMoveEvent()
 
 void CQGaugeItem::setValue(qreal wert)
 {
+
+	if (wert <= 1.0 && wert >= 0.0)
 	mScale = wert;
 	
+	if (wert >= 1.0)
+		mScale = 1.0;
+	if (wert <= 0.0)
+		mScale = 0.0;
 }
 
 void CQGaugeItem::setConcentration(qreal wert)
 {
 	mValue = wert;
+	
+}
+
+void CQGaugeItem::setText(QString text)
+{
+	mText = text;
 	
 }
 
