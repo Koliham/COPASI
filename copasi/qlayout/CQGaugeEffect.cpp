@@ -67,12 +67,21 @@ void CQGaugeEffect::draw(QPainter* painter)
   QRectF transRect = transformed.rect();
 
   QPointF newOffset = offset + (rect.center() - transRect.center());
-
-  //painter->drawPixmap(newOffset, transformed);
+  bool sidegauge =true;
+  if (sidegauge == true)
+  painter->drawPixmap(newOffset, transformed);
   
   ///////////DRAWING THE GAUGE//////////////////
 painter->setRenderHint(QPainter::Antialiasing);
-QRectF rectangle(offset.x(), offset.y(), rect.width(), rect.height());
+bool quadrat = true;
+qreal sizew = rect.width();
+if (rect.width() > rect.height() && (quadrat || sidegauge))
+	sizew = rect.height();
+qreal shift = (rect.width() - sizew) / 2.0;
+QRectF rectangle(offset.x() + shift, offset.y(), sizew, rect.height());
+if (sidegauge == true)
+	rectangle.moveTo(offset.x()+rect.width(),offset.y());
+
 QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.height()*0.2,rectangle.width()*0.6,rectangle.height()*0.6);
     qreal startAngle;
     QPoint midpoint(rectangle.x()+rectangle.width()*0.5,rectangle.y()+rectangle.height()*0.5);
@@ -88,15 +97,15 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     path.arcTo(innerrect,startAngle-241.0,241.0);
     path.closeSubpath();
     QConicalGradient gradient(midpoint,220);
-    gradient.setColorAt(0.0,QColor(140,255,140));
-    gradient.setColorAt((2.0/3.0),QColor(255,255,140));
-    gradient.setColorAt(1.0,QColor(255,140,140));
+    gradient.setColorAt(0.0,QColor(100,255,100));
+    gradient.setColorAt((2.0/3.0),QColor(255,255,100));
+    gradient.setColorAt(1.0,QColor(255,100,100));
 
 	if (mScale >= 1.0)
 	{
-	gradient.setColorAt(0.0,QColor(140,255,140));
-    gradient.setColorAt((2.0/3.0),QColor(140,255,140));
-    gradient.setColorAt(1.0,QColor(140,255,140));
+	gradient.setColorAt(0.0,QColor(100,255,100));
+    gradient.setColorAt((2.0/3.0),QColor(100,255,100));
+    gradient.setColorAt(1.0,QColor(100,255,100));
 	}
 	if (mScale <= 0.0)
 	{
@@ -144,12 +153,12 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     qreal startvalue = 5.0/6.0; //startangle of the gauge at 5/6 of 180 degree
         qreal span = 2.0/3.0; // the wing span of the gauge
         qreal k = M_PI*2;
-        QPointF basis(offset.x()+(rect.width()/2.0),offset.y()+(rect.height()/2.0));
-        QPointF boden1(basis.x()+(rect.width()/12)*cos(M_PI*(9.0/6.0)+(mScale*k*span)),basis.y()+(rect.height()/12)*sin(M_PI*(9.0/6.0)+(mScale*k*span)));
-        QPointF boden2(basis.x()+(rect.width()/12)*cos(M_PI*(1.0/6.0)+(mScale*k*span)),basis.y()+(rect.height()/12)*sin(M_PI*(1.0/6.0)+(mScale*k*span)));
+        QPointF basis(rectangle.x()+(rectangle.width()/2.0),rectangle.y()+(rectangle.height()/2.0));
+        QPointF boden1(basis.x()+(rectangle.width()/12)*cos(M_PI*(9.0/6.0)+(mScale*k*span)),basis.y()+(rectangle.height()/12)*sin(M_PI*(9.0/6.0)+(mScale*k*span)));
+        QPointF boden2(basis.x()+(rectangle.width()/12)*cos(M_PI*(1.0/6.0)+(mScale*k*span)),basis.y()+(rectangle.height()/12)*sin(M_PI*(1.0/6.0)+(mScale*k*span)));
 
-        //qreal laenge = sqrt(rect.width()*rect.width()+rect.height()*rect.height())*0.4;
-        QPoint spitze(basis.x()+cos((M_PI*startvalue)+(mScale*k*span))*rect.width()*0.4,basis.y()+sin((M_PI*startvalue)+(mScale*k*span))*rect.height()*0.4);
+        //qreal laenge = sqrt(rectangle.width()*rectangle.width()+rectangle.height()*rectangle.height())*0.4;
+        QPoint spitze(basis.x()+cos((M_PI*startvalue)+(mScale*k*span))*rectangle.width()*0.4,basis.y()+sin((M_PI*startvalue)+(mScale*k*span))*rectangle.height()*0.4);
 
 
     QPainterPath pointer;
@@ -157,7 +166,8 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
     pointer.lineTo(boden2);
     pointer.lineTo(spitze);
     pointer.lineTo(boden1);
-    painter->fillPath(pointer,QColor(140,64,140));
+    //painter->fillPath(pointer,QColor(140,64,140));
+	painter->fillPath(pointer,QColor(255,0,255));
 //////////////////
 
   QPen pen(Qt::black);
@@ -169,8 +179,8 @@ QRectF innerrect(rectangle.x()+(rectangle.width()*0.2),rectangle.y()+rectangle.h
 
   painter->setPen(pen);
   QFont font = painter->font() ;
-  font.setPointSizeF(rect.height()/4.5);
+  font.setPointSizeF(rectangle.height()/4.5);
   painter->setFont(font);
-    painter->drawText(offset.x(),offset.y()+rect.height()+(rect.height()/8.0),QString::number(mValue));
+    painter->drawText(rectangle.x(),rectangle.y()+rectangle.height()+(rectangle.height()/8.0),QString::number(mValue));
    painter->restore();
 }

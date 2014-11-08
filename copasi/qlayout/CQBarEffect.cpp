@@ -81,9 +81,6 @@ void CQBarEffect::draw(QPainter* painter)
   QFont font = painter->font() ;
   font.setPointSizeF(rect.height()/4.5);
   painter->setFont(font);
-  //painter->drawText(offset.x()+rect.width(),offset.y()+20,QString::number(mValue));
-  //painter->drawText(offset.x()+(rect.width()/9.0),offset.y()+rect.width()*0.9,QString::number(mValue));
   painter->drawText(offset.x()+(rect.width()/11.0),offset.y()+rect.height()-(rect.height()/9.0),QString::number(mValue));
-  //painter->drawText(offset.x()+rect.width(),offset.y()+rect.height()-(rect.height()/9.0),QString::number(rect.height()));//anderen Wert
   painter->restore();
 }

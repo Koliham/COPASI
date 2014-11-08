@@ -293,8 +293,8 @@ public:
 			//adding the boundaries for the gauge, if they are individual
 			//if (mMode == CQCopasiAnimation::Individual) 
 			//{ // I am adding the boundaries for all metabolites, so the first mEntries.size entries are for the individual boundaries
-				double lower = medians[i] - (2.0*variance[i]);
-				double upper = medians[i] + (2.0*variance[i]);
+				double lower = medians[i] - (0.5*variance[i]);
+				double upper = medians[i] + (0.5*variance[i]);
 				if (lower < 0)
 					lower = 0.0;
 				//check, if boundaries are lower/higher than the min/max value
@@ -316,10 +316,10 @@ public:
 		// needed for logarithmic values
 	
 		// and now the global boundaries
-		double lower = minvalue - (2.0*variance[minindex]);
+		double lower = minvalue - (0.5*variance[minindex]);
 		if (lower < 0)
 			lower = 0.0;
-		double upper = maxvalue + (2.0*variance[maxindex]);
+		double upper = maxvalue + (0.5*variance[maxindex]);
 		boundary.push_back(lower); // it must be "lower" here!!!
 		boundary.push_back(upper); // and upper
 		analyseflag = true;

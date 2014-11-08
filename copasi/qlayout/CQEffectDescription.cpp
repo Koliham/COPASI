@@ -190,7 +190,6 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
         qname.remove(QChar('['));
         qname.remove(QChar(']'));
 		qname.remove(QString("Metabolites"));
-	 // qname = "Penis";
 
     if (mCaption == CQEffectDescription::OffLegend && alltheitems.contains(legend))
 	  scene.removeItem(legend);
@@ -270,13 +269,9 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
       {
         CQCopasiEffect* effect = new CQCopasiEffect();
 		if (mGaugeEnd == 0.0)
-		{
 			effect->setScale(linear(mScaleStart, mScaleEnd, t));
-		}
 		else
-		{
 			effect->setScale(linear(mScaleStart, mScaleEnd, percentage(mGaugeStart,mGaugeEnd,conce)));
-		}
 
         effect->setEnabled(true);
         item->setGraphicsEffect(effect);
@@ -319,16 +314,11 @@ void CQEffectDescription::applyToScene(CQLayoutScene& scene, qreal t, qreal conc
         CQGaugeEffect* effect = new CQGaugeEffect();
 		
 		if (mGaugeEnd == 0.0)
-		{
 
 			effect->setScale(t);
-		}
 		else
-		{
-
 			effect->setScale(percentage(mGaugeStart,mGaugeEnd,conce));
-		}
-		
+
 		if (conce != NULL)
 			//effect->setValue(conce); //old one
 			effect->setValue(conce);
